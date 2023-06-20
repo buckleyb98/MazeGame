@@ -27,7 +27,7 @@ namespace MazeGame
             lblGold.Text = _player.Gold.ToString();
 
             // Room Object
-            _room = new Room(1, "Start", "This is the start of the maze");
+            _room = new Room(1, "Start", "This is the start of the maze", null, null, null);
         }
 
         private void MazeGame_Load(object sender, EventArgs e)
