@@ -6,11 +6,20 @@ using System.Threading.Tasks;
 
 namespace Engine
 {
-    public class Monster
+    public class Monster : LivingCreature
     {
         public int ID { get; set; }
         public string Name { get; set; }
         public int MaximumDamage { get; set; }
-        public int RewardScore { get; set; }
+        public int RewardGold { get; set; }
+
+        public Monster(int id, string name, int maximumDamage, int rewardGold, int currentHealthPoints, int totalHealthPoints)
+            : base(currentHealthPoints, totalHealthPoints)
+        {
+            ID = id;
+            Name = name;
+            MaximumDamage = maximumDamage;
+            RewardGold = rewardGold;
+        }
     }
 }

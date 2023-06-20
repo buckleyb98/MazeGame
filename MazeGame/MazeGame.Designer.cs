@@ -31,7 +31,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.lblHealthPoints = new System.Windows.Forms.Label();
-            this.lblScore = new System.Windows.Forms.Label();
+            this.lblGold = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.lblTime = new System.Windows.Forms.Label();
             this.SuspendLayout();
@@ -52,7 +52,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(49, 20);
             this.label2.TabIndex = 1;
-            this.label2.Text = "Score:";
+            this.label2.Text = "Gold:";
             // 
             // lblHealthPoints
             // 
@@ -62,13 +62,13 @@
             this.lblHealthPoints.Size = new System.Drawing.Size(0, 20);
             this.lblHealthPoints.TabIndex = 2;
             // 
-            // lblScore
+            // lblGold
             // 
-            this.lblScore.AutoSize = true;
-            this.lblScore.Location = new System.Drawing.Point(670, 25);
-            this.lblScore.Name = "lblScore";
-            this.lblScore.Size = new System.Drawing.Size(0, 20);
-            this.lblScore.TabIndex = 3;
+            this.lblGold.AutoSize = true;
+            this.lblGold.Location = new System.Drawing.Point(670, 25);
+            this.lblGold.Name = "lblGold";
+            this.lblGold.Size = new System.Drawing.Size(0, 20);
+            this.lblGold.TabIndex = 3;
             // 
             // label3
             // 
@@ -94,7 +94,7 @@
             this.ClientSize = new System.Drawing.Size(782, 653);
             this.Controls.Add(this.lblTime);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.lblScore);
+            this.Controls.Add(this.lblGold);
             this.Controls.Add(this.lblHealthPoints);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -112,7 +112,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label lblHealthPoints;
-        private System.Windows.Forms.Label lblScore;
+        private System.Windows.Forms.Label lblGold;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label lblTime;
     }

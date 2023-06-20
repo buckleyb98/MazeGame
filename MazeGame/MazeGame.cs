@@ -14,18 +14,20 @@ namespace MazeGame
     public partial class MazeGame : Form
     {
         private Player _player;
+        private Room _room;
 
         public MazeGame()
         {
             InitializeComponent();
 
-            _player = new Player();
-            _player.CurrentHealthPoints = 10;
-            _player.TotalHealthPoints = 10;
-            _player.Score = 0;
+            // Player Object
+            _player = new Player(10, 10, 0);
 
             lblHealthPoints.Text = _player.CurrentHealthPoints.ToString();
-            lblScore.Text = _player.Score.ToString();
+            lblGold.Text = _player.Gold.ToString();
+
+            // Room Object
+            _room = new Room(1, "Start", "This is the start of the maze");
         }
 
         private void MazeGame_Load(object sender, EventArgs e)

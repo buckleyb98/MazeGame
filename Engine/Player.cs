@@ -6,10 +6,14 @@ using System.Threading.Tasks;
 
 namespace Engine
 {
-    public class Player
+    public class Player : LivingCreature
     {
-        public int CurrentHealthPoints { get; set; }
-        public int TotalHealthPoints { get; set; }
-        public int Score { get; set; }
+        public int Gold { get; set; }
+
+        public Player(int currentHealthPoints, int totalHealthPoints, int gold)
+            : base(currentHealthPoints, totalHealthPoints)
+        {
+            Gold = gold;
+        }
     }
 }
