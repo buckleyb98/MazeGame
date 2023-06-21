@@ -128,10 +128,9 @@ namespace Engine
         public static void PopulateMonsters()
         {
             Monster goblin = new Monster(MONSTER_ID_GOBLIN, "Goblin", 2, 5, 5, 5);
-            goblin.LootItems.Add(new LootItem(ItemByID(ITEM_ID_SWORD), 75));
+            goblin.LootItems.Add(new LootItem(ItemByID(ITEM_ID_HEALING_POTION), 50));
 
             Monster troll = new Monster(MONSTER_ID_TROLL, "Troll", 5, 10, 8, 8);
-            troll.LootItems.Add(new LootItem(ItemByID(ITEM_ID_HEALING_POTION), 50));
             troll.LootItems.Add(new LootItem(ItemByID(ITEM_ID_DIAMOND), 10));
 
             Monster dragon = new Monster(MONSTER_ID_DRAGON, "Dragon", 8, 20, 15, 15);
