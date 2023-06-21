@@ -10,10 +10,16 @@ namespace Engine
     {
         public int Gold { get; set; }
 
+        public List<InventoryItem> Inventory { get; set; }
+        public List<QuestLog> Quests { get; set; }
+
         public Player(int currentHealthPoints, int totalHealthPoints, int gold)
             : base(currentHealthPoints, totalHealthPoints)
         {
             Gold = gold;
+
+            Inventory = new List<InventoryItem>();
+            Quests = new List<QuestLog>();
         }
     }
 }
