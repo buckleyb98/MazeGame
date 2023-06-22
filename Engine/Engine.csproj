@@ -57,6 +57,7 @@
     <Compile Include="Quest.cs" />
     <Compile Include="QuestItem.cs" />
     <Compile Include="QuestLog.cs" />
+    <Compile Include="RandomNumberGenerator.cs" />
     <Compile Include="Room.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

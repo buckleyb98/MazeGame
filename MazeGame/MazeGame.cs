@@ -23,19 +23,21 @@ namespace MazeGame
             rtbMessages.AppendText("Messages:" + Environment.NewLine + Environment.NewLine);
             rtbRoom.AppendText("Room:" + Environment.NewLine + Environment.NewLine);
 
+            rtbMessages.AppendText("Random Number: " + RandomNumberGenerator.NumberBetween(1, 10));
+
             // Player Object
             _player = new Player(10, 10, 0);
             _player.Inventory.Add(new InventoryItem(Maze.ItemByID(Maze.ITEM_ID_SWORD), 1));
-            //_player.Inventory.Add(new InventoryItem(Maze.ItemByID(Maze.ITEM_ID_MAZE_KEY), 1));
-            //_player.Inventory.Add(new InventoryItem(Maze.ItemByID(Maze.ITEM_ID_HEALING_POTION), 1));
+            _player.Inventory.Add(new InventoryItem(Maze.ItemByID(Maze.ITEM_ID_HEALING_POTION), 1));
+          //_player.Inventory.Add(new InventoryItem(Maze.ItemByID(Maze.ITEM_ID_MAZE_KEY), 1));
 
             _player.Quests.Add(new QuestLog(Maze.QuestByID(Maze.QUEST_ID_ESCAPE_MAZE), false));
-            _player.Quests.Add(new QuestLog(Maze.QuestByID(Maze.QUEST_ID_ESCAPE_MAZE), true));
 
             MoveTo(Maze.RoomByID(Maze.ROOM_ID_ENTRANCE));
 
             lblHealthPoints.Text = _player.CurrentHealthPoints.ToString();
             lblGold.Text = _player.Gold.ToString();
+            lblTime.Text = "00:00";
         }
 
         private void btnNorth_Click(object sender, EventArgs e)
