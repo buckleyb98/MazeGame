@@ -13,7 +13,7 @@ namespace Engine
         public string Description { get; set; }
         public Item EntryItemRequired { get; set; }
         public Quest IsQuestHere { get; set; }
-        public Monster IsMonsterHere { get; set; }
+        public Monster MonsterLivingHere { get; set; }
         public Room RoomToNorth { get; set; }
         public Room RoomToSouth { get; set; }
         public Room RoomToEast { get; set; }
@@ -22,14 +22,14 @@ namespace Engine
         public List<LootItem> LootItems { get; set; }
 
         public Room(int id, string name, string description, 
-            Item entryItemRequired = null, Quest isQuestHere = null, Monster isMonsterHere = null)
+            Item entryItemRequired = null, Quest isQuestHere = null, Monster monsterLivingHere = null)
         {
             ID = id;
             Name = name;
             Description = description;
             EntryItemRequired = entryItemRequired;
             IsQuestHere = isQuestHere;
-            IsMonsterHere = isMonsterHere;
+            MonsterLivingHere = monsterLivingHere;
 
             LootItems = new List<LootItem>();
         }

@@ -9,12 +9,12 @@ namespace Engine
     public class QuestLog
     {
         public Quest Details { get; set; }
-        public bool IsComplete { get; set; }
+        public bool IsCompleted { get; set; }
 
-        public QuestLog(Quest details, bool isComplete)
+        public QuestLog(Quest details, bool IsCompleted)
         {
             Details = details;
-            IsComplete = isComplete;
+            IsCompleted = false;
         }
     }
 }
