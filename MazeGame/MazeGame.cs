@@ -15,6 +15,7 @@ namespace MazeGame
     {
         private Player _player;
         private Monster _currentMonster;
+        private Room _currentRoom;
 
         public MazeGame()
         {
@@ -26,7 +27,7 @@ namespace MazeGame
             rtbMessages.AppendText("Random Number: " + RandomNumberGenerator.NumberBetween(1, 10));
 
             // Player Object
-            _player = new Player(10, 10, 0);
+            _player = new Player(5, 10, 0);
             _player.Inventory.Add(new InventoryItem(Maze.ItemByID(Maze.ITEM_ID_SWORD), 1));
             _player.Inventory.Add(new InventoryItem(Maze.ItemByID(Maze.ITEM_ID_HEALING_POTION), 1));
           //_player.Inventory.Add(new InventoryItem(Maze.ItemByID(Maze.ITEM_ID_MAZE_KEY), 1));
@@ -199,12 +200,114 @@ namespace MazeGame
 
         private void btnUseWeapon_Click(object sender, EventArgs e)
         {
+            Weapon currentWeapon = (Weapon)cboWeapons.SelectedItem;
 
+            int playerDamage = RandomNumberGenerator.NumberBetween(currentWeapon.MinimumDamage, currentWeapon.MaximumDamage);
+
+            _currentMonster.CurrentHealthPoints -= playerDamage;
+
+            rtbMessages.AppendText("You dealt " + playerDamage.ToString() + " damage to " + _currentMonster.Name + "." + Environment.NewLine);
+
+            if (_currentMonster.CurrentHealthPoints <= 0)
+            {
+                rtbMessages.AppendText(_currentMonster.Name + " defeated!" + Environment.NewLine);
+
+                _player.Gold += _currentMonster.RewardGold;
+                rtbMessages.AppendText("You receive " + _currentMonster.RewardGold.ToString() + " gold" + Environment.NewLine);
+
+                List<InventoryItem> lootedItems = new List<InventoryItem>();
+
+                foreach (LootItem lootItem in _currentMonster.LootItems)
+                {
+                    if (RandomNumberGenerator.NumberBetween(1, 100) <= lootItem.DropChance)
+                    {
+                        lootedItems.Add(new InventoryItem(lootItem.Details, 1));
+                    }
+                }
+
+                foreach (InventoryItem inventoryItem in lootedItems)
+                {
+                    _player.AddItemToInventory(inventoryItem.Details);
+
+                    if (inventoryItem.Quantity == 1)
+                    {
+                        rtbMessages.AppendText("You loot " + inventoryItem.Quantity.ToString() + " " + inventoryItem.Details.Name + Environment.NewLine);
+                    }
+                    else
+                    {
+                        rtbMessages.AppendText("You loot " + inventoryItem.Quantity.ToString() + " " + inventoryItem.Details.NamePlural + Environment.NewLine);
+                    }
+                }
+
+                lblHealthPoints.Text = _player.CurrentHealthPoints.ToString();
+                lblGold.Text = _player.Gold.ToString();
+                UpdateUIInventoryLog();
+                UpdateUIWeapons();
+                UpdateUIPotions();
+
+                rtbMessages.Text += Environment.NewLine;
+
+                MoveTo(_player.CurrentRoom);
+            }
+            else
+            {
+                int monsterDamage = RandomNumberGenerator.NumberBetween(0, _currentMonster.MaximumDamage);
+
+                rtbMessages.AppendText("The " + _currentMonster.Name + " dealt " + monsterDamage.ToString() + " damage to you.");
+
+                _player.CurrentHealthPoints -= monsterDamage;
+
+                lblHealthPoints.Text = _player.CurrentHealthPoints.ToString();
+
+                if (_player.CurrentHealthPoints <= 0)
+                {
+                    rtbMessages.AppendText("The " + _currentMonster.Name + " has defeated you. Game Over.");
+
+                    MoveTo(Maze.RoomByID(Maze.ROOM_ID_ENTRANCE));
+                }
+            }
         }
 
         private void btnUsePotion_Click(object sender, EventArgs e)
         {
+            Potion potion = (Potion)cboPotions.SelectedItem;
 
+            _player.CurrentHealthPoints = (_player.CurrentHealthPoints + potion.HealAmount);
+
+            if (_player.CurrentHealthPoints > _player.TotalHealthPoints)
+            {
+                _player.CurrentHealthPoints = _player.TotalHealthPoints;
+            }
+
+            foreach (InventoryItem ii in _player.Inventory)
+            {
+                if (ii.Details.ID == potion.ID)
+                {
+                    ii.Quantity--;
+                    break;
+                }
+            }
+
+            rtbMessages.AppendText("You drink a " + potion.Name + ", healing for " + potion.HealAmount + "." + Environment.NewLine);
+
+            int monsterDamage = RandomNumberGenerator.NumberBetween(0, _currentMonster.MaximumDamage);
+
+            rtbMessages.AppendText("The " + _currentMonster.Name + " dealt " + monsterDamage.ToString() + " damage to you.");
+
+            _player.CurrentHealthPoints -= monsterDamage;
+
+            lblHealthPoints.Text = _player.CurrentHealthPoints.ToString();
+
+            if (_player.CurrentHealthPoints <= 0)
+            {
+                rtbMessages.AppendText("The " + _currentMonster.Name + " has defeated you. Game Over.");
+
+                MoveTo(Maze.RoomByID(Maze.ROOM_ID_ENTRANCE));
+            }
+
+            lblHealthPoints.Text = _player.CurrentHealthPoints.ToString();
+            UpdateUIInventoryLog();
+            UpdateUIPotions();
         }
     }
 }

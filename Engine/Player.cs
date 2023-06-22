@@ -93,5 +93,20 @@ namespace Engine
 
             return true;
         }
+
+        public void AddItemToInventory(Item itemToAdd)
+        {
+            foreach (InventoryItem ii in Inventory)
+            {
+                if (ii.Details.ID == itemToAdd.ID)
+                {
+                    ii.Quantity++;
+
+                    return;
+                }
+            }
+
+            Inventory.Add(new InventoryItem(itemToAdd, 1));
+        }
     }
 }
