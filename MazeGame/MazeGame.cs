@@ -14,22 +14,28 @@ namespace MazeGame
     public partial class MazeGame : Form
     {
         private Player _player;
-        private Monster _monster;
+        private Monster _currentMonster;
 
         public MazeGame()
         {
             InitializeComponent();
 
+            rtbMessages.AppendText("Messages:" + Environment.NewLine + Environment.NewLine);
+            rtbRoom.AppendText("Room:" + Environment.NewLine + Environment.NewLine);
+
             // Player Object
             _player = new Player(10, 10, 0);
-            MoveTo(Maze.RoomByID(Maze.ROOM_ID_ENTRANCE));
             _player.Inventory.Add(new InventoryItem(Maze.ItemByID(Maze.ITEM_ID_SWORD), 1));
+            //_player.Inventory.Add(new InventoryItem(Maze.ItemByID(Maze.ITEM_ID_MAZE_KEY), 1));
+            //_player.Inventory.Add(new InventoryItem(Maze.ItemByID(Maze.ITEM_ID_HEALING_POTION), 1));
+
+            _player.Quests.Add(new QuestLog(Maze.QuestByID(Maze.QUEST_ID_ESCAPE_MAZE), false));
+            _player.Quests.Add(new QuestLog(Maze.QuestByID(Maze.QUEST_ID_ESCAPE_MAZE), true));
+
+            MoveTo(Maze.RoomByID(Maze.ROOM_ID_ENTRANCE));
 
             lblHealthPoints.Text = _player.CurrentHealthPoints.ToString();
             lblGold.Text = _player.Gold.ToString();
-
-            // Room Object
-            Room room = new Room(1, "Start", "This is the start of the maze", null, null, null);
         }
 
         private void btnNorth_Click(object sender, EventArgs e)
@@ -54,7 +60,139 @@ namespace MazeGame
 
         private void MoveTo(Room newRoom)
         {
+            if (!_player.HasRequiredEntryItem(newRoom))
+            {
+                rtbMessages.AppendText("You require a " + newRoom.EntryItemRequired.Name + " to enter this room." 
+                    + Environment.NewLine + Environment.NewLine);
+                return;
+            }
+
             _player.CurrentRoom = newRoom;
+
+            btnNorth.Visible = (newRoom.RoomToNorth != null);
+            btnEast.Visible = (newRoom.RoomToEast != null);
+            btnSouth.Visible = (newRoom.RoomToSouth != null);
+            btnWest.Visible = (newRoom.RoomToWest != null);
+
+            rtbRoom.AppendText(newRoom.Name + Environment.NewLine);
+            rtbRoom.AppendText(newRoom.Description + Environment.NewLine + Environment.NewLine);
+
+            if (newRoom.IsQuestHere != null)
+            {
+                bool playerAlreadyHasQuest = _player.HasThisQuest(newRoom.IsQuestHere);
+                bool playerAlreadyCompletedQuest = _player.CompletedThisQuest(newRoom.IsQuestHere);
+
+
+                if (playerAlreadyHasQuest)
+                {
+                    if (!playerAlreadyCompletedQuest)
+                    {
+                        bool playerHasAllQuestItems = _player.HasAllQuestItems(newRoom.IsQuestHere);
+                    }
+                }
+            }
+
+            UpdateUIInventoryLog();
+            UpdateUIQuestLog();
+            UpdateUIWeapons();
+            UpdateUIPotions();
+        }
+
+        private void UpdateUIInventoryLog()
+        {
+            dgvInventory.RowHeadersVisible = false;
+
+            dgvInventory.ColumnCount = 2;
+            dgvInventory.Columns[0].Name = "Inventory";
+            dgvInventory.Columns[0].Width = 185;
+            dgvInventory.Columns[1].Name = "Quantity";
+
+            dgvInventory.Rows.Clear();
+
+            foreach (InventoryItem inventoryItem in _player.Inventory)
+            {
+                if (inventoryItem.Quantity > 0)
+                {
+                    dgvInventory.Rows.Add(new[] { inventoryItem.Details.Name, inventoryItem.Quantity.ToString() });
+                }
+            }
+        }
+
+        private void UpdateUIQuestLog()
+        {
+            dgvQuests.RowHeadersVisible = false;
+
+            dgvQuests.ColumnCount = 2;
+            dgvQuests.Columns[0].Name = "Quest";
+            dgvQuests.Columns[0].Width = 185;
+            dgvQuests.Columns[1].Name = "Completed?";
+
+            dgvQuests.Rows.Clear();
+
+            foreach (QuestLog questLog in _player.Quests)
+            {
+                dgvQuests.Rows.Add(new[] { questLog.Details.Name, questLog.IsCompleted.ToString() });
+            }
+        }
+
+        private void UpdateUIWeapons()
+        {
+            List<Weapon> weapons = new List<Weapon>();
+
+            foreach (InventoryItem inventoryItem in _player.Inventory)
+            {
+                if (inventoryItem.Details is Weapon)
+                {
+                    if (inventoryItem.Quantity > 0)
+                    {
+                        weapons.Add((Weapon)inventoryItem.Details);
+                    }
+                }
+            }
+
+            if (weapons.Count == 0)
+            {
+                cboWeapons.Visible = false;
+                btnUseWeapon.Visible = false;
+            }
+            else
+            {
+                cboWeapons.DataSource = weapons;
+                cboWeapons.DisplayMember = "Name";
+                cboWeapons.ValueMember = "ID";
+
+                cboWeapons.SelectedIndex = 0;
+            }
+        }
+
+        private void UpdateUIPotions()
+        {
+            List<Potion> potions = new List<Potion>();
+
+            foreach (InventoryItem inventoryItem in _player.Inventory)
+            {
+                if (inventoryItem.Details is Potion)
+                {
+                    if (inventoryItem.Quantity > 0)
+                    {
+                        potions.Add((Potion)inventoryItem.Details);
+                    }
+                }
+            }
+
+            if (potions.Count == 0)
+            {
+                cboPotions.Visible = false;
+                btnUsePotion.Visible = false;
+            }
+            else
+            {
+                cboPotions.DataSource = potions;
+                cboPotions.DisplayMember = "Name";
+                cboPotions.ValueMember = "ID";
+
+                cboPotions.SelectedIndex = 0;
+            }
         }
 
         private void btnUseWeapon_Click(object sender, EventArgs e)
@@ -66,7 +204,5 @@ namespace MazeGame
         {
 
         }
-
-
     }
 }

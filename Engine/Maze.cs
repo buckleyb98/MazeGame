@@ -47,41 +47,40 @@ namespace Engine
             PopulateQuests();
         }
 
-        public static void PopulateItems()
+        private static void PopulateItems()
         {
             Items.Add(new Weapon(ITEM_ID_SWORD, "Sword", "Swords", 0, 5));
 
-            Items.Add(new HealingPotion(ITEM_ID_HEALING_POTION, "Healing potion", "Healing potions", 3));
+            Items.Add(new Potion(ITEM_ID_HEALING_POTION, "Healing potion", "Healing potions", 3));
 
             Items.Add(new Item(ITEM_ID_MAZE_KEY, "Maze key", "Maze keys"));
 
             // Will create 'Treasure' class for these items
-            //Items.Add(new Item(ITEM_ID_GOLD, "Gold", "Gold"));
-            //Items.Add(new Item(ITEM_ID_DIAMOND, "Diamond", "Diamonds"));
+            Items.Add(new Item(ITEM_ID_GOLD, "Gold", "Gold"));
+            Items.Add(new Item(ITEM_ID_DIAMOND, "Diamond", "Diamonds"));
         }
 
-        public static void PopulateRooms()
+        private static void PopulateRooms()
         {
             Room entrance = new Room(ROOM_ID_ENTRANCE, "Maze Entrance", "The first room of the Maze. It is dark and quiet.");
-            entrance.IsQuestHere = QuestByID(QUEST_ID_ESCAPE_MAZE);
 
-            Room room = new Room(ROOM_ID_ROOM, "Basic Room", "A room like any other in the maze. What will you find?");
-            room.IsMonsterHere = MonsterByID(MONSTER_ID_GOBLIN);
+            Room room = new Room(ROOM_ID_ROOM, "Green Room", "A room like any other in the maze. What will you find?", 
+                null, QuestByID(QUEST_ID_ESCAPE_MAZE), MonsterByID(MONSTER_ID_GOBLIN));
 
-            Room roomOne = new Room(ROOM_ID_ROOM_ONE, "Basic Room", "A room like any other in the maze. What will you find?");
+            Room roomOne = new Room(ROOM_ID_ROOM_ONE, "Blue Room", "A room like any other in the maze. What will you find?");
 
-            Room roomTwo = new Room(ROOM_ID_ROOM_TWO, "Basic Room", "A room like any other in the maze. What will you find?");
-            roomTwo.IsMonsterHere = MonsterByID(MONSTER_ID_TROLL);
+            Room roomTwo = new Room(ROOM_ID_ROOM_TWO, "Red Room", "A room like any other in the maze. What will you find?",
+                null, null, MonsterByID(MONSTER_ID_TROLL));
 
-            Room roomThree = new Room(ROOM_ID_ROOM_THREE, "Basic Room", "A room like any other in the maze. What will you find?");
+            Room roomThree = new Room(ROOM_ID_ROOM_THREE, "Yellow Room", "A room like any other in the maze. What will you find?");
 
             Room beforeBossRoom = new Room(ROOM_ID_BEFORE_BOSS_ROOM, "Near Boss Room", "You hear a low rumble and smell smoke... something is close.");
 
-            Room bossRoom = new Room(ROOM_ID_BOSS_ROOM, "Boss Room", "A red Dragon stands tall in the middle of the room. Good luck!");
-            bossRoom.IsMonsterHere = MonsterByID(MONSTER_ID_DRAGON);
+            Room bossRoom = new Room(ROOM_ID_BOSS_ROOM, "Boss Room", "A red Dragon stands tall in the middle of the room. Good luck!", 
+                null, null, MonsterByID(MONSTER_ID_DRAGON));
 
-            Room exit = new Room(ROOM_ID_EXIT, "Maze Exit", "The final room of the Maze. Congratulations for completing the Maze.");
-            entrance.IsQuestHere = QuestByID(QUEST_ID_ESCAPE_MAZE);
+            Room exit = new Room(ROOM_ID_EXIT, "Maze Exit", "The final room of the Maze. Congratulations for completing the Maze.", 
+                ItemByID(ITEM_ID_MAZE_KEY), QuestByID(QUEST_ID_ESCAPE_MAZE));
 
             entrance.RoomToNorth = room;
             entrance.RoomToEast = roomOne;
@@ -125,7 +124,7 @@ namespace Engine
             Rooms.Add(exit);
         }
 
-        public static void PopulateMonsters()
+        private static void PopulateMonsters()
         {
             Monster goblin = new Monster(MONSTER_ID_GOBLIN, "Goblin", 2, 5, 5, 5);
             goblin.LootItems.Add(new LootItem(ItemByID(ITEM_ID_HEALING_POTION), 50));
@@ -141,7 +140,7 @@ namespace Engine
             Monsters.Add(dragon);
         }
 
-        public static void PopulateQuests()
+        private static void PopulateQuests()
         {
             Quest escapeMaze = new Quest(QUEST_ID_ESCAPE_MAZE,
                 "Escape the Maze", 

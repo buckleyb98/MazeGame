@@ -21,5 +21,77 @@ namespace Engine
             Inventory = new List<InventoryItem>();
             Quests = new List<QuestLog>();
         }
+
+        public bool HasRequiredEntryItem(Room room)
+        {
+            if (room.EntryItemRequired == null)
+            {
+                return true;
+            }
+
+            foreach (InventoryItem ii in Inventory)
+            {
+                if (ii.Details.ID == room.EntryItemRequired.ID)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public bool HasThisQuest(Quest quest)
+        {
+            foreach (QuestLog questLog in Quests)
+            {
+                if (questLog.Details.ID == quest.ID)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public bool CompletedThisQuest(Quest quest)
+        {
+            foreach (QuestLog questLog in Quests)
+            {
+                if (questLog.Details.ID == quest.ID)
+                {
+                    return questLog.IsCompleted;
+                }
+            }
+
+            return false;
+        }
+
+        public bool HasAllQuestItems(Quest quest)
+        {
+            foreach (QuestItem qi in quest.QuestItem)
+            {
+                bool itemFoundInInventory = false;
+
+                foreach (InventoryItem ii in Inventory)
+                {
+                    if (ii.Details.ID == qi.Details.ID)
+                    {
+                        itemFoundInInventory = true;
+
+                        if (ii.Quantity < qi.Quantity)
+                        {
+                            return false;
+                        }
+                    }
+                }
+
+                if (!itemFoundInInventory)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }
