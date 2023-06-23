@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -56,6 +57,7 @@
             this.dgvInventory = new System.Windows.Forms.DataGridView();
             this.dgvQuests = new System.Windows.Forms.DataGridView();
             this.rtbMessages = new System.Windows.Forms.RichTextBox();
+            this.gameTime = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dgvInventory)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvQuests)).BeginInit();
             this.SuspendLayout();
@@ -451,6 +453,12 @@
             this.rtbMessages.Text = "";
             this.rtbMessages.TextChanged += new System.EventHandler(this.rtbMessages_TextChanged);
             // 
+            // gameTime
+            // 
+            this.gameTime.Enabled = true;
+            this.gameTime.Interval = 1000;
+            this.gameTime.Tick += new System.EventHandler(this.gameTime_Tick);
+            // 
             // MazeGame
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -507,6 +515,7 @@
         private DataGridView dgvInventory;
         private DataGridView dgvQuests;
         private RichTextBox rtbMessages;
+        private System.Windows.Forms.Timer gameTime;
     }
 }
 
