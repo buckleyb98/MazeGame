@@ -355,5 +355,21 @@ namespace MazeGame
             UpdateUIInventoryLog();
             UpdateUIPotions();
         }
+
+        private void rtbMessages_TextChanged(object sender, EventArgs e)
+        {
+            AutoScrollTextBox(sender);
+        }
+
+        private void rtbRoom_TextChanged(object sender, EventArgs e)
+        {
+            AutoScrollTextBox(sender);
+        }
+
+        private void AutoScrollTextBox(object sender)
+        {
+            RichTextBox? textBox = sender as RichTextBox;
+            textBox?.ScrollToCaret();
+        }
     }
 }
