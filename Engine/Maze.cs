@@ -42,9 +42,9 @@ namespace Engine
         static Maze()
         {
             PopulateItems();
-            PopulateRooms();
             PopulateMonsters();
             PopulateQuests();
+            PopulateRooms();
         }
 
         private static void PopulateItems()
@@ -60,27 +60,57 @@ namespace Engine
             Items.Add(new Item(ITEM_ID_DIAMOND, "Diamond", "Diamonds"));
         }
 
+        private static void PopulateMonsters()
+        {
+            Monster goblin = new Monster(MONSTER_ID_GOBLIN, "Goblin", 2, 5, 5, 5);
+            goblin.LootItems.Add(new LootItem(ItemByID(ITEM_ID_HEALING_POTION), 50));
+
+            Monster troll = new Monster(MONSTER_ID_TROLL, "Troll", 5, 10, 8, 8);
+            troll.LootItems.Add(new LootItem(ItemByID(ITEM_ID_DIAMOND), 10));
+
+            Monster dragon = new Monster(MONSTER_ID_DRAGON, "Dragon", 8, 20, 15, 15);
+            dragon.LootItems.Add(new LootItem(ItemByID(ITEM_ID_MAZE_KEY), 100));
+
+            Monsters.Add(goblin);
+            Monsters.Add(troll);
+            Monsters.Add(dragon);
+        }
+
+        private static void PopulateQuests()
+        {
+            Quest escapeMaze = new Quest(QUEST_ID_ESCAPE_MAZE,
+                "Escape the Maze",
+                "You are trapped in a Maze and must find a way out. Find the Key and the Exit Room.", 50);
+            escapeMaze.QuestItem.Add(new QuestItem(ItemByID(ITEM_ID_MAZE_KEY), 1));
+
+            Quests.Add(escapeMaze);
+        }
+
         private static void PopulateRooms()
         {
-            Room entrance = new Room(ROOM_ID_ENTRANCE, "Maze Entrance", "The first room of the Maze. It is dark and quiet.");
+            Room entrance = new Room(ROOM_ID_ENTRANCE, "Maze Entrance", "The first room of the Maze. It is dark and quiet.",
+                null, null, null);
 
             Room room = new Room(ROOM_ID_ROOM, "Green Room", "A room like any other in the maze. What will you find?", 
                 null, QuestByID(QUEST_ID_ESCAPE_MAZE), MonsterByID(MONSTER_ID_GOBLIN));
 
-            Room roomOne = new Room(ROOM_ID_ROOM_ONE, "Blue Room", "A room like any other in the maze. What will you find?");
+            Room roomOne = new Room(ROOM_ID_ROOM_ONE, "Blue Room", "A room like any other in the maze. What will you find?",
+                null, null, null);
 
-            Room roomTwo = new Room(ROOM_ID_ROOM_TWO, "Red Room", "A room like any other in the maze. What will you find?",
+            Room roomTwo = new Room(ROOM_ID_ROOM_TWO, "Red Room", "A room like any other in the maze. What will you find?", 
                 null, null, MonsterByID(MONSTER_ID_TROLL));
 
-            Room roomThree = new Room(ROOM_ID_ROOM_THREE, "Yellow Room", "A room like any other in the maze. What will you find?");
+            Room roomThree = new Room(ROOM_ID_ROOM_THREE, "Yellow Room", "A room like any other in the maze. What will you find?",
+                null, null, null);
 
-            Room beforeBossRoom = new Room(ROOM_ID_BEFORE_BOSS_ROOM, "Near Boss Room", "You hear a low rumble and smell smoke... something is close.");
+            Room beforeBossRoom = new Room(ROOM_ID_BEFORE_BOSS_ROOM, "Near Boss Room", "You hear a low rumble and smell smoke... something is close.",
+                null, null, null);
 
-            Room bossRoom = new Room(ROOM_ID_BOSS_ROOM, "Boss Room", "A red Dragon stands tall in the middle of the room. Good luck!", 
+            Room bossRoom = new Room(ROOM_ID_BOSS_ROOM, "Boss Room", "A red Dragon stands tall in the middle of the room. Good luck!",
                 null, null, MonsterByID(MONSTER_ID_DRAGON));
 
             Room exit = new Room(ROOM_ID_EXIT, "Maze Exit", "The final room of the Maze. Congratulations for completing the Maze.", 
-                ItemByID(ITEM_ID_MAZE_KEY), QuestByID(QUEST_ID_ESCAPE_MAZE));
+                ItemByID(ITEM_ID_MAZE_KEY), QuestByID(QUEST_ID_ESCAPE_MAZE), null);
 
             entrance.RoomToNorth = room;
             entrance.RoomToEast = roomOne;
@@ -122,32 +152,6 @@ namespace Engine
             Rooms.Add(beforeBossRoom);
             Rooms.Add(bossRoom);
             Rooms.Add(exit);
-        }
-
-        private static void PopulateMonsters()
-        {
-            Monster goblin = new Monster(MONSTER_ID_GOBLIN, "Goblin", 2, 5, 5, 5);
-            goblin.LootItems.Add(new LootItem(ItemByID(ITEM_ID_HEALING_POTION), 50));
-
-            Monster troll = new Monster(MONSTER_ID_TROLL, "Troll", 5, 10, 8, 8);
-            troll.LootItems.Add(new LootItem(ItemByID(ITEM_ID_DIAMOND), 10));
-
-            Monster dragon = new Monster(MONSTER_ID_DRAGON, "Dragon", 8, 20, 15, 15);
-            dragon.LootItems.Add(new LootItem(ItemByID(ITEM_ID_MAZE_KEY), 100));
-
-            Monsters.Add(goblin);
-            Monsters.Add(troll);
-            Monsters.Add(dragon);
-        }
-
-        private static void PopulateQuests()
-        {
-            Quest escapeMaze = new Quest(QUEST_ID_ESCAPE_MAZE,
-                "Escape the Maze", 
-                "You are trapped in a Maze and must find a way out. Find the Key and the Exit Room.", 50);
-            escapeMaze.QuestItem.Add(new QuestItem(ItemByID(ITEM_ID_MAZE_KEY), 1));
-
-            Quests.Add(escapeMaze);
         }
 
         public static Item ItemByID(int id)
