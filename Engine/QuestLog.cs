@@ -11,7 +11,7 @@ namespace Engine
         public Quest Details { get; set; }
         public bool IsCompleted { get; set; }
 
-        public QuestLog(Quest details, bool IsCompleted)
+        public QuestLog(Quest details)
         {
             Details = details;
             IsCompleted = false;

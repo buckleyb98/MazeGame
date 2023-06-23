@@ -15,7 +15,6 @@ namespace MazeGame
     {
         private Player _player;
         private Monster _currentMonster;
-        private Room _currentRoom;
 
         public MazeGame()
         {
@@ -24,24 +23,23 @@ namespace MazeGame
             rtbMessages.AppendText("Messages:" + Environment.NewLine + Environment.NewLine);
             rtbRoom.AppendText("Room:" + Environment.NewLine + Environment.NewLine);
 
-            rtbMessages.AppendText("Random Number: " + RandomNumberGenerator.NumberBetween(1, 10));
+            rtbMessages.AppendText("Random Number: " + RandomNumberGenerator.NumberBetween(1, 10) + Environment.NewLine);
 
             // Player Object
             _player = new Player(5, 10, 0);
             _player.Inventory.Add(new InventoryItem(Maze.ItemByID(Maze.ITEM_ID_SWORD), 1));
             _player.Inventory.Add(new InventoryItem(Maze.ItemByID(Maze.ITEM_ID_HEALING_POTION), 1));
-          //_player.Inventory.Add(new InventoryItem(Maze.ItemByID(Maze.ITEM_ID_MAZE_KEY), 1));
-
-            _player.Quests.Add(new QuestLog(Maze.QuestByID(Maze.QUEST_ID_ESCAPE_MAZE), false));
-
             MoveTo(Maze.RoomByID(Maze.ROOM_ID_ENTRANCE));
+
+            //_player.Inventory.Add(new InventoryItem(Maze.ItemByID(Maze.ITEM_ID_MAZE_KEY), 1));
+            //_player.Quests.Add(new QuestLog(Maze.QuestByID(Maze.QUEST_ID_ESCAPE_MAZE)));
 
             lblHealthPoints.Text = _player.CurrentHealthPoints.ToString();
             lblGold.Text = _player.Gold.ToString();
             lblTime.Text = "00:00";
         }
 
-        private void btnNorth_Click(object sender, EventArgs e)
+        public void btnNorth_Click(object sender, EventArgs e)
         {
             MoveTo(_player.CurrentRoom.RoomToNorth);
         }
@@ -80,19 +78,67 @@ namespace MazeGame
             rtbRoom.AppendText(newRoom.Name + Environment.NewLine);
             rtbRoom.AppendText(newRoom.Description + Environment.NewLine + Environment.NewLine);
 
-            if (newRoom.IsQuestHere != null)
+            if (newRoom.QuestAvaliableHere != null)
             {
-                bool playerAlreadyHasQuest = _player.HasThisQuest(newRoom.IsQuestHere);
-                bool playerAlreadyCompletedQuest = _player.CompletedThisQuest(newRoom.IsQuestHere);
-
+                bool playerAlreadyHasQuest = _player.HasThisQuest(newRoom.QuestAvaliableHere);
+                bool playerAlreadyCompletedQuest = _player.CompletedThisQuest(newRoom.QuestAvaliableHere);
 
                 if (playerAlreadyHasQuest)
                 {
                     if (!playerAlreadyCompletedQuest)
                     {
-                        bool playerHasAllQuestItems = _player.HasAllQuestItems(newRoom.IsQuestHere);
+                        bool playerHasAllQuestItems = _player.HasAllQuestItems(newRoom.QuestAvaliableHere);
+
+                        if (playerHasAllQuestItems)
+                        {
+                            rtbMessages.AppendText(Environment.NewLine + "You completed the '" + newRoom.QuestAvaliableHere.Name + "' quest!" + Environment.NewLine);
+
+                            _player.RemoveQuestItems(newRoom.QuestAvaliableHere);
+
+                            rtbMessages.AppendText("You are rewarded with: " + newRoom.QuestAvaliableHere.RewardGold + " gold." + Environment.NewLine);
+
+                            _player.Gold += newRoom.QuestAvaliableHere.RewardGold;
+
+                            _player.MarkQuestCompleted(newRoom.QuestAvaliableHere);
+                        }
                     }
                 }
+                else
+                {
+                    _player.Quests.Add(new QuestLog(newRoom.QuestAvaliableHere));
+
+                    rtbMessages.AppendText("You receive the '" + newRoom.QuestAvaliableHere.Name + "' quest." + Environment.NewLine 
+                        + newRoom.QuestAvaliableHere.Description + Environment.NewLine);
+                }
+            }
+
+            if (newRoom.MonsterLivingHere != null)
+            {
+                rtbMessages.AppendText("You see a " + newRoom.MonsterLivingHere.Name + Environment.NewLine);
+
+                Monster newMonster = Maze.MonsterByID(newRoom.MonsterLivingHere.ID);
+
+                _currentMonster = new Monster(newMonster.ID, newMonster.Name, newMonster.MaximumDamage, newMonster.RewardGold, 
+                    newMonster.CurrentHealthPoints, newMonster.TotalHealthPoints);
+
+                foreach (LootItem lootItem in newMonster.LootItems)
+                {
+                    _currentMonster.LootItems.Add(lootItem);
+                }
+
+                cboWeapons.Visible = true;
+                cboPotions.Visible = true;
+                btnUseWeapon.Visible = true;
+                btnUsePotion.Visible = true;
+            }
+            else
+            {
+                _currentMonster = null;
+
+                cboWeapons.Visible = false;
+                cboPotions.Visible = false;
+                btnUseWeapon.Visible = false;
+                btnUsePotion.Visible = false;
             }
 
             UpdateUIInventoryLog();

@@ -22,6 +22,11 @@ namespace Engine
             Quests = new List<QuestLog>();
         }
 
+        public void MoveTo(Room newRoom)
+        {
+            
+        }
+
         public bool HasRequiredEntryItem(Room room)
         {
             if (room.EntryItemRequired == null)
@@ -92,6 +97,34 @@ namespace Engine
             }
 
             return true;
+        }
+
+        public void RemoveQuestItems(Quest quest)
+        {
+            foreach (QuestItem qi in quest.QuestItem)
+            {
+                foreach (InventoryItem ii in Inventory)
+                {
+                    if (ii.Details.ID == qi.Details.ID)
+                    {
+                        ii.Quantity -= qi.Quantity;
+                        break;
+                    }
+                }
+            }
+        }
+
+        public void MarkQuestCompleted(Quest quest)
+        {
+            foreach (QuestLog ql in Quests)
+            {
+                if (ql.Details.ID == quest.ID)
+                {
+                    ql.IsCompleted = true;
+
+                    return;
+                }
+            }
         }
 
         public void AddItemToInventory(Item itemToAdd)
