@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -36,7 +37,8 @@ namespace MazeGame
 
             lblHealthPoints.Text = _player.CurrentHealthPoints.ToString();
             lblGold.Text = _player.Gold.ToString();
-            lblTime.Text = "00:00";
+
+            gameTime.Start();
         }
 
         public void btnNorth_Click(object sender, EventArgs e)
@@ -370,6 +372,14 @@ namespace MazeGame
         {
             RichTextBox? textBox = sender as RichTextBox;
             textBox?.ScrollToCaret();
+        }
+
+        private int ticks;
+
+        private void gameTime_Tick(object sender, EventArgs e)
+        {
+            ticks++;
+            lblTime.Text = ticks.ToString();
         }
     }
 }
