@@ -297,6 +297,7 @@
             this.rtbRoom.Size = new System.Drawing.Size(312, 189);
             this.rtbRoom.TabIndex = 15;
             this.rtbRoom.Text = "";
+            this.rtbRoom.TextChanged += new System.EventHandler(this.rtbRoom_TextChanged);
             // 
             // dgvInventory
             // 
@@ -448,6 +449,7 @@
             this.rtbMessages.Size = new System.Drawing.Size(312, 200);
             this.rtbMessages.TabIndex = 16;
             this.rtbMessages.Text = "";
+            this.rtbMessages.TextChanged += new System.EventHandler(this.rtbMessages_TextChanged);
             // 
             // MazeGame
             // 
